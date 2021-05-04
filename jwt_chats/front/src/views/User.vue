@@ -3,7 +3,12 @@
         <Head />
         <div class="content">
           <div class="row">
-            {{ getUsers }}
+           <div class="image">
+              <Avataruser :getUsers="getUsers" />
+           </div>
+           <div class="info">
+              <Infouser :userinfo="getUsers" />
+           </div>
           </div>
         </div>
     </div>
@@ -11,9 +16,11 @@
 
 <script>
 import Head from "../components/Head"
+import Avataruser from "../components/user/Avataruser.vue"
 import { mapActions,mapGetters } from 'vuex'
+import Infouser from '../components/user/Infouser.vue'
 export default {
-  components: { Head },
+  components: { Head,Avataruser, Infouser },
   computed: mapGetters(['getUsers']),
   methods: {
     ...mapActions(['getUs'])
@@ -24,5 +31,21 @@ export default {
 }
 </script>
 <style scoped>
+  .content{
+    margin-top: 50px;
+  }
+  .row{
+    width: 100%;
+    max-width: 1170px;
+    margin: auto;
+    display: flex;
+  }
 
+  .image{
+        width: 25%;
+    margin-right: 15px;
+  }
+  .info{
+    width: 70%;
+  }
 </style>
