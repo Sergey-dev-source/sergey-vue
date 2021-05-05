@@ -23,3 +23,5 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('closed', 'DataController@closed');
 });
 
+Route::post('/search','SearchController@search');
+Route::get('/us/{id}','SearchController@user');

@@ -1,25 +1,42 @@
 <template>
     <div id="nav">
         <div class="menu">
-            <div>
+            <div class="s">
                 <form>
                     <div class="search">
-                        <input type="search" >
+                        <input type="text" v-model="searchVal" @keyup="send" >
                     </div>
                 </form>
+                <div class="result">
+                  <search-result />
+                </div>
             </div>
           <ul>
             <li>
-                 <router-link to="/user">User</router-link>
-               <button type="button" @click="logout">Logout</button>           
+              <router-link to="/user">User</router-link>
+              <button type="button" @click="logout">Logout</button>           
             </li>
         </ul>
         </div>
+        
       </div>
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+import SearchResult from "./user/SearchResult"
 export default {
+    data() {
+      return {
+        searchVal: ''
+      }
+    },
+    props:{
+      user:{
+        default: Object
+      }
+    },
+    
     mounted() { 
         let user = localStorage.getItem('token');
         let user1 = sessionStorage.getItem('token');
@@ -35,8 +52,21 @@ export default {
            this.us = true;
            this.$router.push({path: '/'})
            
+        },
+
+        ...mapActions(['search']),
+        send(){
+          let data = {
+            id: this.user.user.id,
+            s: this.searchVal
+          }
+          
+          this.search(data);
         }
     },
+    components: {
+      SearchResult
+    }
 }
 </script>
 <style scoped>
@@ -74,4 +104,25 @@ button{
     font-weight: bold;
     cursor: pointer;
 }
+.s{
+  margin: auto;
+  position: relative;
+}
+
+.search input{
+    width: 335px;
+    height: 10px;
+    padding: 5px 15px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+}
+.result{
+    position: absolute;
+    width: auto;
+    top: 37px;
+    left: 0;
+    background: darkgrey;
+    z-index: 9;
+  }
 </style>

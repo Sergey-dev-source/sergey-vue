@@ -1,8 +1,7 @@
 <template>
     <div class="info">
-        <div>
             <user-menu />
-        </div>
+        
         <div class="info_block" v-for="users in userinfo" :key="users.id">
             <span>
                 {{ users.name }}
@@ -25,3 +24,15 @@ export default {
     components: {UserMenu}
 }
 </script>
+<style scoped>
+    .info_block{
+        margin-top: 15px;
+        padding: 20px;
+    }
+
+    .info_block span{
+        margin-right: 23px;
+        color: brown;
+        font-size: 14px;
+    }
+</style>

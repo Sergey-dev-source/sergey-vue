@@ -1,6 +1,6 @@
 <template>
     <div class="user">
-        <Head />
+        <Head :user="getUsers" />
         <div class="content">
           <div class="row">
            <div class="image">
@@ -47,5 +47,6 @@ export default {
   }
   .info{
     width: 70%;
+    padding: 4px;
   }
 </style>
