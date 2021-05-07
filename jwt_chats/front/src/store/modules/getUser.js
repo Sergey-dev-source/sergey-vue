@@ -5,7 +5,7 @@ export default {
             let user = '';
             let us = localStorage.getItem('token');
             
-            if (us){ 
+            if (us != undefined){ 
                 user = us;
             }else{
                user = sessionStorage.getItem('token'); 

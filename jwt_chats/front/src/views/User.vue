@@ -1,6 +1,6 @@
 <template>
     <div class="user">
-        <Head :user="getUsers" />
+        <Head />
         <div class="content">
           <div class="row">
            <div class="image">
@@ -19,13 +19,14 @@ import Head from "../components/Head"
 import Avataruser from "../components/user/Avataruser.vue"
 import { mapActions,mapGetters } from 'vuex'
 import Infouser from '../components/user/Infouser.vue'
+
 export default {
   components: { Head,Avataruser, Infouser },
   computed: mapGetters(['getUsers']),
   methods: {
     ...mapActions(['getUs'])
   },
-  mounted() {
+  created() {
     this.getUs();
   },
 }

@@ -1,7 +1,8 @@
 <template>
-    <div v-if="getSearch">
+
+    <div v-if="getSearch ">
         <div  v-for="search in getSearch" :key="search.id">
-            <router-link class="res" :to="'/us/'+search.id ">
+            <router-link class="res" :to="{ name: 'us',params: { id: search.id } }" @click="view(search.id)" >
                 <div class="img">
                     <img :src="search.avatar" alt="">
                 </div>
@@ -15,9 +16,24 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex"
+import {mapGetters,mapActions} from "vuex"
 export default {
+    
     computed:mapGetters(['getSearch']),
+    methods: {
+        ...mapActions(['getUser']),
+   
+        view(id){
+            this.getUser(id)
+            let i =0;
+            for (let index = 0; index < this.getSearch.length; index++) {
+              i++
+                
+            } this.getSearch.splice(0, i)
+
+            this.$emit('ok','oks');
+        }
+    }
 }
 </script>
 

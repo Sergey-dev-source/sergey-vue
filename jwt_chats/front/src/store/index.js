@@ -4,6 +4,9 @@ import login from "./modules/login"
 import getUser from './modules/getUser'
 import search from './modules/search'
 import getUs from './modules/getUs'
+import Contact from './modules/Contact'
+import Message from './modules/Message'
+import sendMessage from './modules/sendMessage'
 
 export default createStore({
   modules: {
@@ -11,6 +14,9 @@ export default createStore({
     login,
     getUser,
     search,
-    getUs
+    getUs,
+    Contact,
+    Message,
+    sendMessage
   }
 })

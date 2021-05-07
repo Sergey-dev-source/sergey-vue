@@ -25,3 +25,6 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 
 Route::post('/search','SearchController@search');
 Route::get('/us/{id}','SearchController@user');
+Route::get('/contact/{id}','ChatsController@getContacts');
+Route::get('/message/{from}/{to}','MessageController@getMessage');
+Route::post('/send','MessageController@sendMessage');

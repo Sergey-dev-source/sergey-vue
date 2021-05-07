@@ -4,6 +4,7 @@ import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import User from '../views/User.vue'
 import Us from "../views/Us.vue"
+import Chat from "../views/Chat.vue"
 
 
 const routes = [
@@ -27,9 +28,14 @@ const routes = [
   {
     path: '/us/:id',
     name: 'us',
-    component: Us
-  }
-  
+    component: Us,
+    
+  },
+  {
+    path: '/chat',
+    name: 'chat',
+    component: Chat
+  },
 ]
 
 const router = createRouter({

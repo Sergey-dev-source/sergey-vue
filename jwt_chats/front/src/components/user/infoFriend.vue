@@ -2,35 +2,29 @@
     <div class="info">
             <user-menu />
         
-        <div class="info_block" v-for="(users, index) in userinfo" :key="`ind-${index}`">
+        <div class="info_block" v-for="users in userinfo" :key="users.id">
             <span>
                 {{ users.name }}
             </span>
             <span>
                 {{ users.email }}
             </span>
+            <div>
+                write message
+            </div>
         </div>
-        
     </div>
 </template>
 
 <script>
 import UserMenu from "./UserMenu.vue"
 export default {
-    data() {
-        return {
-            id1: this.userinfo.user && this.userinfo.user.id
-        }
-    },
     props: {
         userinfo: {
             default: Object
         }
     },
-    components: {UserMenu},
-    mounted(){
-        localStorage.setItem('i',this.id1)
-    }
+    components: {UserMenu}
 }
 </script>
 <style scoped>
@@ -43,5 +37,10 @@ export default {
         margin-right: 23px;
         color: brown;
         font-size: 14px;
+    }
+    .info_block div{
+        margin: 30px 0;
+        text-transform: capitalize;
+        color: #098765;
     }
 </style>

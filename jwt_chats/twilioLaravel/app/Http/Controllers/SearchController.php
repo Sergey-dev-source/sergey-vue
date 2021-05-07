@@ -11,11 +11,10 @@ class SearchController extends Controller
     {
 
     	$name = $request->s;
-    	$id = $request->id;
     	if (empty($name)) {
     		return response()->json('');
     	}
-    	$users = User::where('name','LIKE',$name.'%')->where('id','!=',$id)
+    	$users = User::where('name','LIKE',$name.'%')
                       ->get();
     		return response()->json($users);
     	
@@ -24,7 +23,7 @@ class SearchController extends Controller
     }
     public function user($id)
     {
-    	$user = User::where('id',$id)->first();
+    	$user = User::where('id',$id)->get();
     	return response()->json($user);
     }
 }

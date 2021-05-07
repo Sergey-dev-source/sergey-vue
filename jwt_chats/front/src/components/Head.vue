@@ -7,13 +7,15 @@
                         <input type="text" v-model="searchVal" @keyup="send" >
                     </div>
                 </form>
-                <div class="result">
-                  <search-result />
+                <div class="result" >
+                  <search-result @ok="ok" />
                 </div>
             </div>
           <ul>
             <li>
               <router-link to="/user">User</router-link>
+              <router-link to="/chat">Chat</router-link>
+
               <button type="button" @click="logout">Logout</button>           
             </li>
         </ul>
@@ -26,21 +28,19 @@
 import {mapActions} from 'vuex'
 import SearchResult from "./user/SearchResult"
 export default {
+    
+    
     data() {
       return {
-        searchVal: ''
-      }
-    },
-    props:{
-      user:{
-        default: Object
+        searchVal: '',
+        
       }
     },
     
     mounted() { 
-        let user = localStorage.getItem('token');
+        let user2 = localStorage.getItem('token');
         let user1 = sessionStorage.getItem('token');
-        if(!user && !user1){
+        if(!user2 && !user1){
             this.$router.push('/')
         }
         
@@ -49,6 +49,7 @@ export default {
         logout(){
            localStorage.removeItem('token')
            sessionStorage.removeItem('token')
+           localStorage.removeItem('i')
            this.us = true;
            this.$router.push({path: '/'})
            
@@ -56,12 +57,15 @@ export default {
 
         ...mapActions(['search']),
         send(){
+         
           let data = {
-            id: this.user.user.id,
             s: this.searchVal
           }
           
           this.search(data);
+        },
+        ok(){
+          this.searchVal = '';
         }
     },
     components: {

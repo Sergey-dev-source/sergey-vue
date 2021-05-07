@@ -1,6 +1,6 @@
 <template>
     <div class="img">
-       <img v-for="(a,index)  in getUsers" :key="index" :src="a.avatar" alt="ok" >
+       <img v-for="(a,index)  in getUsers" :key="index" :src="a.avatar" alt="ok">
     </div>
 </template>
 
