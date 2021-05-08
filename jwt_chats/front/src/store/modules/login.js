@@ -4,7 +4,7 @@ export default {
         async login(ctx,formData){
 
             let r = formData.remember;
-            axios.post('http://127.0.0.1:8000/api/login',
+            axios.post('http://127.0.0.1:8000/api/auth/login',
             {
               email: formData.email,
               password: formData.password
@@ -18,17 +18,17 @@ export default {
               }else{
                 ctx.commit('sessionlog',response.data)
               }
-              
+
             })
-            
+
           }
     },
     mutations: {
         errorlog(state,message){
             state.errorLogin =  message;
-          
+
         },
-    
+
         storagelog(state,locale){
           localStorage.setItem('token',locale.token)
             window.location = '#/user'
