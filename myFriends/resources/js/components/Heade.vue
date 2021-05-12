@@ -14,5 +14,11 @@
 
 <script>
     export default {
+        mounted(){
+            let token = localStorage.getItem('token');
+            if (token){
+                window.location = '/user';
             }
+        }
+    }
 </script>

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('register', 'UserController@register');
+    Route::post('register', 'UserController@register');
     Route::post('login', 'UserController@authenticate');
     Route::get('open', 'DataController@open');
 
@@ -22,3 +22,8 @@ Route::post('register', 'UserController@register');
         Route::get('user', 'UserController@getAuthenticatedUser');
         Route::get('closed', 'DataController@closed');
     });
+
+    Route::get('/contact/{id}','messageController@contact');
+
+
+    Route::get('/message/{from}/{to}','messageController@getMessage');

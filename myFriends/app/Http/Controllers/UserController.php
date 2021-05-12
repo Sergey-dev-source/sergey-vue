@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -15,33 +15,47 @@ class UserController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        try {
-            if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 400);
-            }
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'could_not_create_token'], 500);
+        if (empty($request->email) || empty($request->password)){
+            return response()->json(['err' => 'fill in all the fields']);
         }
+        elseif (! $token = JWTAuth::attempt($credentials)) {
+            return response()->json(['err' => 'E-mail or password not found ']);
+        }
+
+
 
         return response()->json(compact('token'));
     }
 
     public function register(Request $request)
     {
-            $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+
+
+
+        $v = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'phone' => 'required',
+            'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
         ]);
 
-        if($validator->fails()){
-                return response()->json($validator->errors()->toJson(), 400);
+        if ($v->fails())
+        {
+            return response()->json(['message_errors'=>$v->errors()]);
         }
 
+        $file = $request->file('avatar');
+        $name ='http://127.0.0.1:8000/images/users/' . uniqid() . '.' . $file->extension();
+        $file->move(public_path('images/users'), $name);
+
+
         $user = User::create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password')),
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'avatar' => $name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
 
         $token = JWTAuth::fromUser($user);
@@ -50,27 +64,27 @@ class UserController extends Controller
     }
 
     public function getAuthenticatedUser()
-        {
-                try {
+    {
+        try {
 
-                        if (! $user = JWTAuth::parseToken()->authenticate()) {
-                                return response()->json(['user_not_found'], 404);
-                        }
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found']);
+            }
 
-                } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
 
-                        return response()->json(['token_expired'], $e->getStatusCode());
+            return response()->json(['token_expired'], $e->getStatusCode());
 
-                } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
 
-                        return response()->json(['token_invalid'], $e->getStatusCode());
+            return response()->json(['token_invalid'], $e->getStatusCode());
 
-                } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
 
-                        return response()->json(['token_absent'], $e->getStatusCode());
+            return response()->json(['token_absent'], $e->getStatusCode());
 
-                }
-
-                return response()->json(compact('user'));
         }
+
+        return response()->json(compact('user'));
+    }
 }
