@@ -12,9 +12,9 @@
                 </ul>
             </div>
             <div class="col-sm-4 mt-2">
-                <input type="text" class="form-control">
+                <input type="text" v-model="searchValue" class="form-control" @keyup="search">
             </div>
-            <div class="col-sm-2 mt-2"> 
+            <div class="col-sm-2 mt-2">
                 <button class="btn btn-secondary" type="button" @click="logout">Logout</button>
             </div>
         </div>
@@ -23,11 +23,19 @@
 
 <script>
 export default {
+    data(){
+      return {
+          searchValue: ''
+      }
+    },
     methods: {
         logout(){
             localStorage.removeItem('token');
             localStorage.removeItem('ui');
             window.location = '/'
+        },
+        search(){
+            console.log(this.searchValue)
         }
     },
     mounted() {

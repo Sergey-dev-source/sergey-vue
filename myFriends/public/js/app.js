@@ -2125,11 +2125,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      searchValue: ''
+    };
+  },
   methods: {
     logout: function logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('ui');
       window.location = '/';
+    },
+    search: function search() {
+      console.log(this.searchValue);
     }
   },
   mounted: function mounted() {
@@ -2370,7 +2378,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+/* harmony import */ var _route_routes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./route/routes */ "./resources/js/route/routes.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
@@ -2381,7 +2389,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 vue__WEBPACK_IMPORTED_MODULE_2__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_3__.default);
 var app = new vue__WEBPACK_IMPORTED_MODULE_2__.default({
   el: '#app',
-  router: new vue_router__WEBPACK_IMPORTED_MODULE_3__.default(_routes__WEBPACK_IMPORTED_MODULE_0__.default),
+  router: new vue_router__WEBPACK_IMPORTED_MODULE_3__.default(_route_routes__WEBPACK_IMPORTED_MODULE_0__.default),
   store: _store__WEBPACK_IMPORTED_MODULE_1__.default
 });
 
@@ -2440,10 +2448,10 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__.default({
 
 /***/ }),
 
-/***/ "./resources/js/routes.js":
-/*!********************************!*\
-  !*** ./resources/js/routes.js ***!
-  \********************************/
+/***/ "./resources/js/route/routes.js":
+/*!**************************************!*\
+  !*** ./resources/js/route/routes.js ***!
+  \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2451,10 +2459,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _page_Home__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./page/Home */ "./resources/js/page/Home.vue");
-/* harmony import */ var _page_Login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./page/Login */ "./resources/js/page/Login.vue");
-/* harmony import */ var _page_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./page/User */ "./resources/js/page/User.vue");
-/* harmony import */ var _page_Chat__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./page/Chat */ "./resources/js/page/Chat.vue");
+/* harmony import */ var _page_Home__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../page/Home */ "./resources/js/page/Home.vue");
+/* harmony import */ var _page_Login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../page/Login */ "./resources/js/page/Login.vue");
+/* harmony import */ var _page_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../page/User */ "./resources/js/page/User.vue");
+/* harmony import */ var _page_Chat__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../page/Chat */ "./resources/js/page/Chat.vue");
 
 
 
@@ -46283,7 +46291,30 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(0),
+      _c("div", { staticClass: "col-sm-4 mt-2" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.searchValue,
+              expression: "searchValue"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { type: "text" },
+          domProps: { value: _vm.searchValue },
+          on: {
+            keyup: _vm.search,
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchValue = $event.target.value
+            }
+          }
+        })
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-sm-2 mt-2" }, [
         _c(
@@ -46299,16 +46330,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-sm-4 mt-2" }, [
-      _c("input", { staticClass: "form-control", attrs: { type: "text" } })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
