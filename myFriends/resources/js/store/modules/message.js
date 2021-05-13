@@ -7,11 +7,28 @@ export default {
             .then( (response) => {
                 ctx.commit('editMes',response.data) 
             })
+        },
+        async sendActionMessage(ctx,formData){
+            axios.post('api/message/save',formData)
+            .then( (response) => {
+                ctx.commit('editSendMes',response.data) 
+            })
+        },
+        async authActionMessage(ctx){
+            let userId = localStorage.getItem('ui');
+            Echo.private(`messages.${userId}`)
+            .listen(`NewMessage`, (e) => {
+                ctx.commit('editSendMes',e.message);
+                
+            })
         }
     },
     mutations:{
         editMes(state,data){
             state.message = data
+        },
+        editSendMes(state,data){
+            state.message.push(data)
         }
     },
     state:{

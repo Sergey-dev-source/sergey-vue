@@ -27,3 +27,5 @@ use Illuminate\Support\Facades\Route;
 
 
     Route::get('/message/{from}/{to}','messageController@getMessage');
+
+    Route::post('/message/save','messageController@save');

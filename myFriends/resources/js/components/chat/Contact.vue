@@ -33,8 +33,13 @@ export default {
                 from: fromId,
                 to: id
             }
-
             this.getActionMessage(formData);
+            let info = {
+                toid: id,
+                nam: name
+
+            }
+            this.$emit('n',info);
         }
     }
 }
