@@ -3,13 +3,13 @@ import axios from "axios"
 export default {
     actions: {
         async getActionMessage(ctx,formData){
-            axios.get('api/message/'+ formData.from+'/'+formData.to)
+            axios.get('/api/message/'+ formData.from+'/'+formData.to)
             .then( (response) => {
                 ctx.commit('editMes',response.data) 
             })
         },
         async sendActionMessage(ctx,formData){
-            axios.post('api/message/save',formData)
+            axios.post('/api/message/save',formData)
             .then( (response) => {
                 ctx.commit('editSendMes',response.data) 
             })

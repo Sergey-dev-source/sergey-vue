@@ -26,6 +26,7 @@ export default {
     },
     mounted() {
         this.getActionUser();
+        
     },
     computed: mapGetters(['getUsers']),
     components: {

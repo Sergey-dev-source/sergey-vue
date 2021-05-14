@@ -4,7 +4,7 @@
         <div class="container mt-5 p-4" style="background: #f2f3f2;">
             <div class="row">
                 <div class="col-sm-4">
-                    <Contact @n="selName" :cont="getContact" />
+                    <Contact @n="selName" :name='usName' :cont="getContact" />
                 </div>
                 <div class="col-sm-8">
                     <ChatBody :name='usName' :message="getMessage" />
@@ -41,6 +41,9 @@ export default {
   mounted() {
       this.getActContact();
       this.authActionMessage();
+      if( this.$root.m ){
+          this.usName = this.$root.m
+      }
   },
     
 }
