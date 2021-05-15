@@ -2141,16 +2141,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       usId: localStorage.getItem('ui'),
-      searchValue: ''
+      searchValue: '',
+      count: 0
     };
   },
-  computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['getSearchUsers']),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['searchAction', 'searchUserAction'])), {}, {
+  computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['getSearchUsers', 'getCountMessage']),
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['searchAction', 'searchUserAction', 'countMessage'])), {}, {
     logout: function logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('ui');
@@ -2168,13 +2170,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$router.push('/users/' + id);
       var l = this.getSearchUsers.length;
       this.getSearchUsers.splice(0, l);
+    },
+    co: function co() {
+      var _this = this;
+
+      this.getCountMessage.forEach(function (element) {
+        console.log(element);
+        _this.count += element.messages_count;
+      });
     }
   }),
   mounted: function mounted() {
+    var id = localStorage.getItem('ui');
+    this.countMessage(id);
     var us = localStorage.getItem('token');
 
     if (!us) {
       window.location = '/login';
+    }
+
+    this.co();
+  },
+  watch: {
+    getCountMessage: function getCountMessage() {
+      this.co();
     }
   }
 });
@@ -2856,6 +2875,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3);
       }))();
+    },
+    countMessage: function countMessage(ctx, id) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/counts/' + id).then(function (response) {
+                  ctx.commit('editeditCounts', response.data);
+                });
+
+              case 1:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
     }
   },
   mutations: {
@@ -2864,14 +2901,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     editSendMes: function editSendMes(state, data) {
       state.message.push(data);
+    },
+    editeditCounts: function editeditCounts(state, data) {
+      state.counts = data;
     }
   },
   state: {
-    message: []
+    message: [],
+    counts: []
   },
   getters: {
     getMessage: function getMessage(state) {
       return state.message;
+    },
+    getCountMessage: function getCountMessage(state) {
+      return state.counts;
     }
   }
 });
@@ -46613,7 +46657,9 @@ var render = function() {
                   attrs: { to: "/chat" }
                 },
                 [_vm._v("Chat")]
-              )
+              ),
+              _vm._v(" "),
+              _c("span", [_vm._v(_vm._s(_vm.count))])
             ],
             1
           )

@@ -8,6 +8,7 @@
                     </li>
                     <li class="list-inline-item">
                         <router-link class="social-icon text-white text-xs-center" to="/chat">Chat</router-link>
+                        <span>{{ count }}</span>
                     </li>
                 </ul>
             </div>
@@ -38,12 +39,13 @@ export default {
     data(){
       return {
           usId: localStorage.getItem('ui'),
-          searchValue: ''
+          searchValue: '',
+          count: 0
       }
     },
-    computed: mapGetters(['getSearchUsers']),
+    computed: mapGetters(['getSearchUsers','getCountMessage']),
     methods: {
-        ...mapActions(['searchAction','searchUserAction']),
+        ...mapActions(['searchAction','searchUserAction','countMessage']),
         logout(){
             localStorage.removeItem('token');
             localStorage.removeItem('ui');
@@ -53,7 +55,7 @@ export default {
             let formData = {
                 from: this.usId,
                 sear: this.searchValue
-            } 
+            }
 
             this.searchAction(formData);
         },
@@ -62,14 +64,29 @@ export default {
             this.$router.push('/users/'+id)
             let l = this.getSearchUsers.length
             this.getSearchUsers.splice(0,l)
+        },
+        co(){
+this.getCountMessage.forEach(element => {
+            console.log(element)
+            this.count+= element.messages_count
+        });
         }
     },
     mounted() {
+
+        let id = localStorage.getItem('ui');
+        this.countMessage(id);
         let us = localStorage.getItem('token');
         if (! us){
             window.location = '/login'
         }
+        this.co();
     },
+    watch: {
+        getCountMessage(){
+            this.co();
+        }
+    }
 }
 </script>
 
