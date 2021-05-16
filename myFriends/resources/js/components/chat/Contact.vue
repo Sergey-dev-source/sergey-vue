@@ -1,6 +1,6 @@
 <template>
     <div class="contact">
-        <div  class="cont_block" v-for="c in cont" :key="c.id" @click="selContact(c.id,c.name)" :class="{'active': c.id == selId }">
+        <div  class="cont_block" v-for="c in cont" :key="c.id" @click="selContact(c.id,c.name)" :class="{'active': c.id == name.toid }">
             <div class="image">
                 <img :src="c.avatar" alt="">
             </div>
@@ -10,24 +10,22 @@
             </div>        
         </div>
     </div>
+    
 </template>
 <script>
 import {mapActions} from 'vuex'
 export default {
-    data() {
-        return {
-            selId: ''
-        }
-    },
     props: {
         cont: {
             default: ''
-        }
+        },
+        name: {
+            default: ''
+        },
     },
     methods: {
         ...mapActions(['getActionMessage']),
         selContact(id,name){
-            this.selId = id;
             let fromId = localStorage.getItem('ui');
             let formData = {
                 from: fromId,

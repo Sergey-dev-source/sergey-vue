@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Message;
 use App\Events\NewMessage;
+use Illuminate\Support\Facades\DB;
 class messageController extends Controller
 {
     public function contact($id){
@@ -27,5 +28,13 @@ class messageController extends Controller
         ]);
         broadcast(new NewMessage($message));
         return response()->json($message);
+    }
+    public function counts($id){
+        $count = Message::select(\DB::raw('`from` as sender_id,count(`from`) as messages_count'))
+        ->where('to',$id)
+        ->where('count',false)
+        ->groupBy('from')
+        ->get();
+        return response()->json($count);
     }
 }

@@ -1,12 +1,13 @@
 <template>
     <div class="chat">
         <div class="chat_name">
+        
             <h1 v-if="name != '' ">{{ name.nam }}</h1>
             <h1 v-else>please enter contact</h1>
         </div>
         <div class="chat_body" ref="feed">
             <div v-if="message != '' ">
-                <div class="chat_block"  v-for="messag in message" :key="messag.id" :class="{'from': messag.from == id}">
+                <div class="chat_block"  v-for="messag in message" :key="messag.id" :class="{'from': messag.to == name.toid}">
                     <span>{{ messag.message }}</span>           
                 </div>
             </div>

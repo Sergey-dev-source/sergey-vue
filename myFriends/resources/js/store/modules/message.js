@@ -3,15 +3,15 @@ import axios from "axios"
 export default {
     actions: {
         async getActionMessage(ctx,formData){
-            axios.get('api/message/'+ formData.from+'/'+formData.to)
+            axios.get('/api/message/'+ formData.from+'/'+formData.to)
             .then( (response) => {
-                ctx.commit('editMes',response.data) 
+                ctx.commit('editMes',response.data)
             })
         },
         async sendActionMessage(ctx,formData){
-            axios.post('api/message/save',formData)
+            axios.post('/api/message/save',formData)
             .then( (response) => {
-                ctx.commit('editSendMes',response.data) 
+                ctx.commit('editSendMes',response.data)
             })
         },
         async authActionMessage(ctx){
@@ -19,7 +19,13 @@ export default {
             Echo.private(`messages.${userId}`)
             .listen(`NewMessage`, (e) => {
                 ctx.commit('editSendMes',e.message);
-                
+
+            })
+        },
+        async countMessage(ctx,id){
+            axios.get('/api/counts/'+id)
+            .then( (response) =>{
+                ctx.commit('editeditCounts',response.data);
             })
         }
     },
@@ -29,14 +35,21 @@ export default {
         },
         editSendMes(state,data){
             state.message.push(data)
+        },
+        editeditCounts(state,data){
+            state.counts = data;
         }
     },
     state:{
-        message: []
+        message: [],
+        counts: []
     },
     getters:{
         getMessage(state){
             return state.message
+        },
+        getCountMessage(state){
+            return state.counts
         }
     }
 }

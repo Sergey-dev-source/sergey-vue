@@ -29,3 +29,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('/message/{from}/{to}','messageController@getMessage');
 
     Route::post('/message/save','messageController@save');
+    Route::post('/search','SearchController@search');
+    Route::get('/us/{id}','SearchController@user');
+    Route::get('/counts/{id}','messageController@counts');
