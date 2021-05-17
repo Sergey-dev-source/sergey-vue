@@ -2,6 +2,13 @@ import axios from "axios"
 
 export default {
     actions: {
+        async getActContact(ctx){
+            let id = localStorage.getItem('ui');
+            axios.get('api/contact/'+id)
+            .then( (response) =>{
+                ctx.commit('editAcount',response.data);
+            })
+        },
         async getActionMessage(ctx,formData){
             axios.get('/api/message/'+ formData.from+'/'+formData.to)
             .then( (response) => {
@@ -27,7 +34,15 @@ export default {
             .then( (response) =>{
                 ctx.commit('editeditCounts',response.data);
             })
+        },
+        aaa(ctx, a,b){
+            let c = {
+                cont: a,
+                bool: b
+            }
+            ctx.commit('editcount',c)
         }
+        
     },
     mutations:{
         editMes(state,data){
@@ -38,11 +53,30 @@ export default {
         },
         editeditCounts(state,data){
             state.counts = data;
+        },
+        editAcount(state,data){
+            state.cont = data
+        },
+        editcount(store,s ){
+            
+            store.cont = store.cont.map((a)=>{
+                
+                if (a.id = s.cont.id){
+                    return a
+                }
+
+                if (reset){
+                    a.unread = 0;
+                }else{
+                    a.unread+= 1;
+                }
+            })
         }
     },
     state:{
         message: [],
-        counts: []
+        counts: [],
+        cont: []
     },
     getters:{
         getMessage(state){
@@ -50,6 +84,9 @@ export default {
         },
         getCountMessage(state){
             return state.counts
+        },
+        getContact(state){
+            return state.cont
         }
     }
 }

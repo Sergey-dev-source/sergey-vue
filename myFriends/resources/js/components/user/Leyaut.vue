@@ -4,11 +4,16 @@
             <div class="col-sm-6 mt-3">
                <ul class="list-inline">
                      <li class="list-inline-item">
-                        <router-link class="social-icon text-white text-xs-center" to="/user">Home</router-link>
+                        <router-link class="social-icon text-white text-xs-center" to="/user">  
+                            <i class="fas fa-home"></i>
+                        </router-link>
                     </li>
                     <li class="list-inline-item">
-                        <router-link class="social-icon text-white text-xs-center" to="/chat">Chat</router-link>
-                        <span>{{ count }}</span>
+                        <router-link class="social-icon text-white text-xs-center" to="/chat">
+                            <i class="far fa-envelope"></i>
+                            <span v-if="getCountMessage > 0">{{ getCountMessage }}</span>
+                        </router-link>
+                        
                     </li>
                 </ul>
             </div>
@@ -40,7 +45,6 @@ export default {
       return {
           usId: localStorage.getItem('ui'),
           searchValue: '',
-          count: 0
       }
     },
     computed: mapGetters(['getSearchUsers','getCountMessage']),
@@ -65,12 +69,6 @@ export default {
             let l = this.getSearchUsers.length
             this.getSearchUsers.splice(0,l)
         },
-        co(){
-this.getCountMessage.forEach(element => {
-            console.log(element)
-            this.count+= element.messages_count
-        });
-        }
     },
     mounted() {
 
@@ -80,13 +78,8 @@ this.getCountMessage.forEach(element => {
         if (! us){
             window.location = '/login'
         }
-        this.co();
     },
-    watch: {
-        getCountMessage(){
-            this.co();
-        }
-    }
+    
 }
 </script>
 
@@ -118,5 +111,25 @@ this.getCountMessage.forEach(element => {
     }
     .btn {
             height: 39px;
+    }
+
+    .list-inline li a i {
+        font-size: 30px;
+    }
+
+    .list-inline li a{
+        display: flex;
+
+    }
+    .list-inline li a span{
+        display: block;
+        text-decoration: none;
+        border: 1px solid;
+        padding: 2px;
+        width: 23px;
+        font-size: 11px;
+        border-radius: 50%;
+        height: 22px;
+        margin: -7px 6px;
     }
 </style>

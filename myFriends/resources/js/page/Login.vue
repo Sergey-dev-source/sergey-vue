@@ -32,13 +32,14 @@ export default {
   },
   computed: mapGetters(['getErr']),
     methods: {
-        ...mapActions(['log']),
+        ...mapActions(['log','countMessage']),
         logged(){
            let data = {
                email:this.email,
                password: this.password
            }
            this.log(data);
+           
         }
     }
 }

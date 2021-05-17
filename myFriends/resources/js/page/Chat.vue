@@ -23,7 +23,7 @@ import { mapGetters,mapActions } from 'vuex'
 export default {
     data() {
         return {
-            usName: ''        
+            usName: ''      
         }
     },
     components: { 
@@ -33,17 +33,20 @@ export default {
     },
     computed: mapGetters(['getContact','getMessage']),
     methods: {
-        ...mapActions(['getActContact','authActionMessage']),
+        ...mapActions(['getActContact','authActionMessage','aaa']),
         selName(nam){
+            this.aaa(nam.cont,true);
             this.usName = nam
-        }
+        },
+       
     },
+   
   mounted() {
       this.getActContact();
       this.authActionMessage();
       if( this.$root.m ){
           this.usName = this.$root.m
-      }
+      };
   },
     
 }

@@ -1,12 +1,16 @@
 <template>
     <div class="contact">
-        <div  class="cont_block" v-for="c in cont" :key="c.id" @click="selContact(c.id,c.name)" :class="{'active': c.id == name.toid }">
+    <pre>
+        
+    </pre>
+        <div  class="cont_block" v-for="c in sortedContacts" :key="c.id" @click="selContact(c.id,c.name,c)" :class="{'active': c.id == name.toid }">
             <div class="image">
                 <img :src="c.avatar" alt="">
             </div>
             <div class="inf">
                 <span>{{ c.name }}</span>
                 <span>{{ c.email }}</span>
+                <span class="read" v-if="c.unread">{{ c.unread }}</span>
             </div>        
         </div>
     </div>
@@ -17,15 +21,23 @@ import {mapActions} from 'vuex'
 export default {
     props: {
         cont: {
+            type:Array,
             default: ''
         },
         name: {
             default: ''
         },
     },
+    data() {
+        return {
+            selected: this.cont.length ? this.cont[0] : null
+        }
+    },
     methods: {
         ...mapActions(['getActionMessage']),
-        selContact(id,name){
+        selContact(id,name,contactt){
+            
+            this.selected  = id;
             let fromId = localStorage.getItem('ui');
             let formData = {
                 from: fromId,
@@ -34,12 +46,25 @@ export default {
             this.getActionMessage(formData);
             let info = {
                 toid: id,
-                nam: name
-
+                nam: name,
+                cont: contactt
             }
             this.$emit('n',info);
+        },
+        
+    },
+    computed: {
+    sortedContacts() {
+      return _.sortBy(this.cont,[(contact)=>{
+
+        if (contact.id == this.selected){
+            
+          return Infinity;
         }
+        return contact.unread;
+      }]).reverse();
     }
+  }
 }
 </script>
 

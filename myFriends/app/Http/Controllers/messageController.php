@@ -10,8 +10,22 @@ use Illuminate\Support\Facades\DB;
 class messageController extends Controller
 {
     public function contact($id){
-        $contact = User::where('id','!=',$id)->get();
-        return response()->json($contact);
+        $contacts = User::where('id', '!=', $id)->get();
+
+        $unreadIds = Message::select(\DB::raw('`from` as sender_id,count(`from`) as messages_count'))
+            ->where('to',$id)
+            ->where('count',false)
+            ->groupBy('from')
+
+            ->get();
+
+        $contacts = $contacts->map(function ($contact) use ($unreadIds){
+            $contactUnread = $unreadIds->where('sender_id',$contact->id)->first();
+            $contact->unread = $contactUnread ? $contactUnread->messages_count: 0;
+            return $contact;
+        });
+
+        return response()->json($contacts);
     }
 
     public function getMessage($from,$to)
@@ -30,11 +44,15 @@ class messageController extends Controller
         return response()->json($message);
     }
     public function counts($id){
-        $count = Message::select(\DB::raw('`from` as sender_id,count(`from`) as messages_count'))
+        $c = 0;
+        $count = Message::select(\DB::raw('count(`id`) as messages_count'))
         ->where('to',$id)
         ->where('count',false)
         ->groupBy('from')
         ->get();
-        return response()->json($count);
+        foreach($count as $co ){ 
+            $c+=$co['messages_count'];
+        }
+        return response()->json($c);
     }
 }

@@ -4,14 +4,12 @@ Vue.use(Vuex)
 
 import login from './modules/login'
 import user from './modules/user'
-import contact from './modules/contact'
 import message from './modules/message'
 import search from './modules/search'
 export default new Vuex.Store({
     modules: {
         login,
         user,
-        contact,
         message,
         search
     }

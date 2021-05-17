@@ -2001,18 +2001,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     cont: {
+      type: Array,
       "default": ''
     },
     name: {
       "default": ''
     }
   },
+  data: function data() {
+    return {
+      selected: this.cont.length ? this.cont[0] : null
+    };
+  },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['getActionMessage'])), {}, {
-    selContact: function selContact(id, name) {
+    selContact: function selContact(id, name, contactt) {
+      this.selected = id;
       var fromId = localStorage.getItem('ui');
       var formData = {
         from: fromId,
@@ -2021,11 +2032,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.getActionMessage(formData);
       var info = {
         toid: id,
-        nam: name
+        nam: name,
+        cont: contactt
       };
       this.$emit('n', info);
     }
-  })
+  }),
+  computed: {
+    sortedContacts: function sortedContacts() {
+      var _this = this;
+
+      return _.sortBy(this.cont, [function (contact) {
+        if (contact.id == _this.selected) {
+          return Infinity;
+        }
+
+        return contact.unread;
+      }]).reverse();
+    }
+  }
 });
 
 /***/ }),
@@ -2142,13 +2167,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       usId: localStorage.getItem('ui'),
-      searchValue: '',
-      count: 0
+      searchValue: ''
     };
   },
   computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['getSearchUsers', 'getCountMessage']),
@@ -2170,14 +2199,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$router.push('/users/' + id);
       var l = this.getSearchUsers.length;
       this.getSearchUsers.splice(0, l);
-    },
-    co: function co() {
-      var _this = this;
-
-      this.getCountMessage.forEach(function (element) {
-        console.log(element);
-        _this.count += element.messages_count;
-      });
     }
   }),
   mounted: function mounted() {
@@ -2187,13 +2208,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     if (!us) {
       window.location = '/login';
-    }
-
-    this.co();
-  },
-  watch: {
-    getCountMessage: function getCountMessage() {
-      this.co();
     }
   }
 });
@@ -2253,8 +2267,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     ChatBody: _components_chat_ChatBody__WEBPACK_IMPORTED_MODULE_2__.default
   },
   computed: (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)(['getContact', 'getMessage']),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)(['getActContact', 'authActionMessage'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)(['getActContact', 'authActionMessage', 'aaa'])), {}, {
     selName: function selName(nam) {
+      this.aaa(nam.cont, true);
       this.usName = nam;
     }
   }),
@@ -2265,6 +2280,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     if (this.$root.m) {
       this.usName = this.$root.m;
     }
+
+    ;
   }
 });
 
@@ -2350,7 +2367,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   computed: (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)(['getErr']),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)(['log'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)(['log', 'countMessage'])), {}, {
     logged: function logged() {
       var data = {
         email: this.email,
@@ -2646,13 +2663,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_login__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/login */ "./resources/js/store/modules/login.js");
 /* harmony import */ var _modules_user__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/user */ "./resources/js/store/modules/user.js");
-/* harmony import */ var _modules_contact__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/contact */ "./resources/js/store/modules/contact.js");
-/* harmony import */ var _modules_message__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/message */ "./resources/js/store/modules/message.js");
-/* harmony import */ var _modules_search__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/search */ "./resources/js/store/modules/search.js");
+/* harmony import */ var _modules_message__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/message */ "./resources/js/store/modules/message.js");
+/* harmony import */ var _modules_search__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/search */ "./resources/js/store/modules/search.js");
 
 
 vue__WEBPACK_IMPORTED_MODULE_0__.default.use(vuex__WEBPACK_IMPORTED_MODULE_1__.default);
-
 
 
 
@@ -2661,73 +2676,10 @@ vue__WEBPACK_IMPORTED_MODULE_0__.default.use(vuex__WEBPACK_IMPORTED_MODULE_1__.d
   modules: {
     login: _modules_login__WEBPACK_IMPORTED_MODULE_2__.default,
     user: _modules_user__WEBPACK_IMPORTED_MODULE_3__.default,
-    contact: _modules_contact__WEBPACK_IMPORTED_MODULE_4__.default,
-    message: _modules_message__WEBPACK_IMPORTED_MODULE_5__.default,
-    search: _modules_search__WEBPACK_IMPORTED_MODULE_6__.default
+    message: _modules_message__WEBPACK_IMPORTED_MODULE_4__.default,
+    search: _modules_search__WEBPACK_IMPORTED_MODULE_5__.default
   }
 }));
-
-/***/ }),
-
-/***/ "./resources/js/store/modules/contact.js":
-/*!***********************************************!*\
-  !*** ./resources/js/store/modules/contact.js ***!
-  \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  actions: {
-    getActContact: function getActContact(ctx) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var id;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                id = localStorage.getItem('ui');
-                axios__WEBPACK_IMPORTED_MODULE_1___default().get('api/contact/' + id).then(function (response) {
-                  ctx.commit('editAcount', response.data);
-                });
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
-    }
-  },
-  mutations: {
-    editAcount: function editAcount(state, data) {
-      state.cont = data;
-    }
-  },
-  state: {
-    cont: []
-  },
-  getters: {
-    getContact: function getContact(state) {
-      return state.cont;
-    }
-  }
-});
 
 /***/ }),
 
@@ -2820,17 +2772,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   actions: {
-    getActionMessage: function getActionMessage(ctx, formData) {
+    getActContact: function getActContact(ctx) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var id;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/message/' + formData.from + '/' + formData.to).then(function (response) {
-                  ctx.commit('editMes', response.data);
+                id = localStorage.getItem('ui');
+                axios__WEBPACK_IMPORTED_MODULE_1___default().get('api/contact/' + id).then(function (response) {
+                  ctx.commit('editAcount', response.data);
                 });
 
-              case 1:
+              case 2:
               case "end":
                 return _context.stop();
             }
@@ -2838,14 +2792,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    sendActionMessage: function sendActionMessage(ctx, formData) {
+    getActionMessage: function getActionMessage(ctx, formData) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/message/save', formData).then(function (response) {
-                  ctx.commit('editSendMes', response.data);
+                axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/message/' + formData.from + '/' + formData.to).then(function (response) {
+                  ctx.commit('editMes', response.data);
                 });
 
               case 1:
@@ -2856,12 +2810,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    authActionMessage: function authActionMessage(ctx) {
+    sendActionMessage: function sendActionMessage(ctx, formData) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var userId;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
+              case 0:
+                axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/message/save', formData).then(function (response) {
+                  ctx.commit('editSendMes', response.data);
+                });
+
+              case 1:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    authActionMessage: function authActionMessage(ctx) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var userId;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
               case 0:
                 userId = localStorage.getItem('ui');
                 Echo["private"]("messages.".concat(userId)).listen("NewMessage", function (e) {
@@ -2870,17 +2842,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3);
+        }, _callee4);
       }))();
     },
     countMessage: function countMessage(ctx, id) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/counts/' + id).then(function (response) {
                   ctx.commit('editeditCounts', response.data);
@@ -2888,11 +2860,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 1:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4);
+        }, _callee5);
       }))();
+    },
+    aaa: function aaa(ctx, a, b) {
+      var c = {
+        cont: a,
+        bool: b
+      };
+      ctx.commit('editcount', c);
     }
   },
   mutations: {
@@ -2904,11 +2883,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     editeditCounts: function editeditCounts(state, data) {
       state.counts = data;
+    },
+    editAcount: function editAcount(state, data) {
+      state.cont = data;
+    },
+    editcount: function editcount(store, s) {
+      store.cont = store.cont.map(function (a) {
+        if (a.id = s.cont.id) {
+          return a;
+        }
+
+        if (reset) {
+          a.unread = 0;
+        } else {
+          a.unread += 1;
+        }
+      });
     }
   },
   state: {
     message: [],
-    counts: []
+    counts: [],
+    cont: []
   },
   getters: {
     getMessage: function getMessage(state) {
@@ -2916,6 +2912,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     getCountMessage: function getCountMessage(state) {
       return state.counts;
+    },
+    getContact: function getContact(state) {
+      return state.cont;
     }
   }
 });
@@ -7577,7 +7576,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.search[data-v-fb35c6ee]{\n    position: absolute;\n    width: 25%;\n    top: 60px;\n    left: 39%;\n    background-color: rgb(238, 186, 186);\n    z-index: 9;\n    color: #273327;\n}\n.search_block[data-v-fb35c6ee]{\n    width: 100%;\n    display: flex;\n    justify-content: space-between;\n    padding: 10px;\n}\n.img[data-v-fb35c6ee]{\n    width: 20%;\n    height: auto;\n}\n.img img[data-v-fb35c6ee]{\n    width: 100%;\n    height: 100%;\n    border-radius: 40px;\n}\n.btn[data-v-fb35c6ee] {\n        height: 39px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.search[data-v-fb35c6ee]{\n    position: absolute;\n    width: 25%;\n    top: 60px;\n    left: 39%;\n    background-color: rgb(238, 186, 186);\n    z-index: 9;\n    color: #273327;\n}\n.search_block[data-v-fb35c6ee]{\n    width: 100%;\n    display: flex;\n    justify-content: space-between;\n    padding: 10px;\n}\n.img[data-v-fb35c6ee]{\n    width: 20%;\n    height: auto;\n}\n.img img[data-v-fb35c6ee]{\n    width: 100%;\n    height: 100%;\n    border-radius: 40px;\n}\n.btn[data-v-fb35c6ee] {\n        height: 39px;\n}\n.list-inline li a i[data-v-fb35c6ee] {\n    font-size: 30px;\n}\n.list-inline li a[data-v-fb35c6ee]{\n    display: flex;\n}\n.list-inline li a span[data-v-fb35c6ee]{\n    display: block;\n    text-decoration: none;\n    border: 1px solid;\n    padding: 2px;\n    width: 23px;\n    font-size: 11px;\n    border-radius: 50%;\n    height: 22px;\n    margin: -7px 6px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -46510,33 +46509,43 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "contact" },
-    _vm._l(_vm.cont, function(c) {
-      return _c(
-        "div",
-        {
-          key: c.id,
-          staticClass: "cont_block",
-          class: { active: c.id == _vm.name.toid },
-          on: {
-            click: function($event) {
-              return _vm.selContact(c.id, c.name)
+    [
+      _c("pre", [_vm._v("    \n")]),
+      _vm._v(" "),
+      _vm._l(_vm.sortedContacts, function(c) {
+        return _c(
+          "div",
+          {
+            key: c.id,
+            staticClass: "cont_block",
+            class: { active: c.id == _vm.name.toid },
+            on: {
+              click: function($event) {
+                return _vm.selContact(c.id, c.name, c)
+              }
             }
-          }
-        },
-        [
-          _c("div", { staticClass: "image" }, [
-            _c("img", { attrs: { src: c.avatar, alt: "" } })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "inf" }, [
-            _c("span", [_vm._v(_vm._s(c.name))]),
+          },
+          [
+            _c("div", { staticClass: "image" }, [
+              _c("img", { attrs: { src: c.avatar, alt: "" } })
+            ]),
             _vm._v(" "),
-            _c("span", [_vm._v(_vm._s(c.email))])
-          ])
-        ]
-      )
-    }),
-    0
+            _c("div", { staticClass: "inf" }, [
+              _c("span", [_vm._v(_vm._s(c.name))]),
+              _vm._v(" "),
+              _c("span", [_vm._v(_vm._s(c.email))]),
+              _vm._v(" "),
+              c.unread
+                ? _c("span", { staticClass: "read" }, [
+                    _vm._v(_vm._s(c.unread))
+                  ])
+                : _vm._e()
+            ])
+          ]
+        )
+      })
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -46640,7 +46649,7 @@ var render = function() {
                   staticClass: "social-icon text-white text-xs-center",
                   attrs: { to: "/user" }
                 },
-                [_vm._v("Home")]
+                [_c("i", { staticClass: "fas fa-home" })]
               )
             ],
             1
@@ -46656,10 +46665,14 @@ var render = function() {
                   staticClass: "social-icon text-white text-xs-center",
                   attrs: { to: "/chat" }
                 },
-                [_vm._v("Chat")]
-              ),
-              _vm._v(" "),
-              _c("span", [_vm._v(_vm._s(_vm.count))])
+                [
+                  _c("i", { staticClass: "far fa-envelope" }),
+                  _vm._v(" "),
+                  _vm.getCountMessage > 0
+                    ? _c("span", [_vm._v(_vm._s(_vm.getCountMessage))])
+                    : _vm._e()
+                ]
+              )
             ],
             1
           )
